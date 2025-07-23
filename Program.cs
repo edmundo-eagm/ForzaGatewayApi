@@ -1,3 +1,5 @@
+using System.Text.Json;
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddReverseProxy()
     .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
@@ -18,12 +20,14 @@ app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 app.Use(async (context, next) =>
 {
 
-    if (context.Request.Path.StartsWithSegments("/products"))
+    if (context.Request.Path.StartsWithSegments("/Product"))
     {
         if (!context.Request.Headers.TryGetValue("Authorization", out var token))
         {
             context.Response.StatusCode = 401;
-            await context.Response.WriteAsync("Authorization header missing");
+            var tokenNotFound = new { message = "Token no encontrado." };
+            context.Response.ContentType = "application/json";
+            await context.Response.WriteAsync(JsonSerializer.Serialize(tokenNotFound));
             return;
         }
 
@@ -41,7 +45,6 @@ app.Use(async (context, next) =>
         }
     }
 
-    // Si pasó la validación o no es /products, continúa con la petición
     await next();
 });
 app.MapReverseProxy();
