@@ -6,7 +6,7 @@ builder.Services.AddReverseProxy()
 
 builder.Services.AddHttpClient("AuthClient", client =>
 {
-    client.BaseAddress = new Uri("http://localhost:5002/");
+    client.BaseAddress = new Uri("http://localhost:5002/Token");
 });
 
 builder.Services.AddCors();
@@ -40,7 +40,9 @@ app.Use(async (context, next) =>
         if (!response.IsSuccessStatusCode)
         {
             context.Response.StatusCode = 401;
-            await context.Response.WriteAsync("Invalid token");
+            var tokenInvalid = new { message = "Token invalido." };
+            context.Response.ContentType = "application/json";
+            await context.Response.WriteAsync(JsonSerializer.Serialize(tokenInvalid));
             return;
         }
     }
