@@ -1,0 +1,6 @@
+@ForzaGatewayApi_HostAddress = http://localhost:5291
+
+GET {{ForzaGatewayApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
