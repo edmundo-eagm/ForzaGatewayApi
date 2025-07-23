@@ -31,20 +31,20 @@ app.Use(async (context, next) =>
             return;
         }
 
-        var httpClientFactory = context.RequestServices.GetRequiredService<IHttpClientFactory>();
-        var client = httpClientFactory.CreateClient("AuthClient");
+        // var httpClientFactory = context.RequestServices.GetRequiredService<IHttpClientFactory>();
+        // var client = httpClientFactory.CreateClient("AuthClient");
 
-        var tokenValue = token.ToString().Replace("Bearer ", "");
-        var response = await client.PostAsJsonAsync("validate", new { Token = tokenValue });
+        // var tokenValue = token.ToString().Replace("Bearer ", "");
+        // var response = await client.PostAsJsonAsync("validate", new { Token = tokenValue });
 
-        if (!response.IsSuccessStatusCode)
-        {
-            context.Response.StatusCode = 401;
-            var tokenInvalid = new { message = "Token invalido." };
-            context.Response.ContentType = "application/json";
-            await context.Response.WriteAsync(JsonSerializer.Serialize(tokenInvalid));
-            return;
-        }
+        // if (!response.IsSuccessStatusCode)
+        // {
+        //     context.Response.StatusCode = 401;
+        //     var tokenInvalid = new { message = "Token invalido." };
+        //     context.Response.ContentType = "application/json";
+        //     await context.Response.WriteAsync(JsonSerializer.Serialize(tokenInvalid));
+        //     return;
+        // }
     }
 
     await next();
